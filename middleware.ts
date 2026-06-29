@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/nextjs';
 //
 // These Sentry emissions are what we're verifying: under a Turbopack build,
 // do they reach Sentry in production? Compare against a `build:webpack` control.
-export async function middelware(request: NextRequest): Promise<NextResponse> {
+export async function middleware(request: NextRequest): Promise<NextResponse> {
   console.log('[middleware] hasClient =', !!Sentry.getClient());
   Sentry.logger.info('middleware hit', {
     path: request.nextUrl.pathname,
