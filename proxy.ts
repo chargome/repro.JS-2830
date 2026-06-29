@@ -7,14 +7,14 @@ import * as Sentry from '@sentry/nextjs';
 //
 // These Sentry emissions are what we're verifying: under a Turbopack build,
 // do they reach Sentry in production? Compare against a `build:webpack` control.
-export async function middleware(request: NextRequest): Promise<NextResponse> {
-  console.log('[middleware] hasClient =', !!Sentry.getClient());
-  Sentry.logger.info('middleware hit', {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
+  console.log('[proxy] hasClient =', !!Sentry.getClient());
+  Sentry.logger.info('proxy hit', {
     path: request.nextUrl.pathname,
     method: request.method,
   });
 
-  Sentry.captureMessage('middleware.ts reached', 'info');
+  Sentry.captureMessage('proxy.ts reached', 'info');
 
   await Sentry.flush(2000);
 
@@ -23,5 +23,4 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
 export const config = {
   matcher: ['/api/probe'],
-  runtime: 'nodejs',
 };
