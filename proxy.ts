@@ -7,13 +7,16 @@ import * as Sentry from '@sentry/nextjs';
 //
 // These Sentry emissions are what we're verifying: under a Turbopack build,
 // do they reach Sentry in production? Compare against a `build:webpack` control.
-export function proxy(request: NextRequest): NextResponse {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
+  console.log('[proxy] hasClient =', !!Sentry.getClient());
   Sentry.logger.info('proxy hit', {
     path: request.nextUrl.pathname,
     method: request.method,
   });
 
   Sentry.captureMessage('proxy.ts reached', 'info');
+
+  await Sentry.flush(2000);
 
   return NextResponse.next();
 }
